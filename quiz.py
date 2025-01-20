@@ -55,15 +55,18 @@ def main():
     for i, (question, correct_answer) in enumerate(questions, 1):
         # Создаем список доступных слов (не использованных)
         available_answers = [word for word in answers if word not in st.session_state.used_words]
-        
+
         # Если у пользователя уже есть выбранный ответ, используем его, иначе показываем пустое значение
         current_answer = st.session_state.answers.get(f"q{i}", "")
 
         # Отображаем вопрос и selectbox
+        # Если current_answer есть, не добавляем его в доступные ответы
+        available_answers_for_current_question = [word for word in available_answers if word != current_answer]
+
         user_answer = st.selectbox(
             f"{i}. {question}",
-            options=[""] + available_answers,  # первый элемент это пустое значение
-            index=available_answers.index(current_answer) + 1 if current_answer in available_answers else 0,  # выбираем правильный индекс
+            options=[""] + available_answers_for_current_question,  # Пустой вариант и доступные ответы без выбранного
+            index=available_answers_for_current_question.index(current_answer) + 1 if current_answer in available_answers_for_current_question else 0,  # индекс текущего ответа
             key=f"q{i}"
         )
 
