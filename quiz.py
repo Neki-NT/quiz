@@ -15,12 +15,10 @@ def main():
     ]
     
     # Сохраняем выбранные слова для отслеживания использованных
-    used_words = set()
+    if 'used_words' not in st.session_state:
+        st.session_state.used_words = set()
 
-    st.write(", ".join(answers))
-    st.write("Use each word only once to answer the questions. Let's begin!")
-
-    # Вопросы и ответы
+    # Список вопросов и правильных ответов
     questions = [
         ("The new fashion __ shows that oversized clothes are becoming popular.", "trend"),
         ("This discovery marked the __ achievement in her academic career.", "ultimate"),
@@ -52,16 +50,16 @@ def main():
     score = 0
     for i, (question, correct_answer) in enumerate(questions, 1):
         # Create a list of available words (not used yet)
-        available_answers = [word for word in answers if word not in used_words]
+        available_answers = [word for word in answers if word not in st.session_state.used_words]
         
-        # Select box for user to choose from available words
-        user_answer = st.selectbox(f"{i}. {question}", available_answers, key=f"q{i}")
-        
-        # Mark the word as used only if the user has made a selection
-        if user_answer:
-            used_words.add(user_answer)
+        # Initially, the dropdown will be empty, and options will appear when the user selects a word
+        user_answer = st.selectbox(f"{i}. {question}", options=[""] + available_answers, key=f"q{i}")
 
-            # Check answer
+        # If a word is selected, mark it as used
+        if user_answer:
+            st.session_state.used_words.add(user_answer)
+
+            # Check the answer
             if user_answer.lower() == correct_answer:
                 score += 1
 
