@@ -72,5 +72,14 @@ def main():
             st.session_state.answers[f"q{i}"] = user_answer
             st.session_state.used_words.add(user_answer)
 
-            # Chec
+            # Check the answer
+            if user_answer.lower() == correct_answer:
+                score += 1
+
+    if st.button("Submit"):
+        st.write(f"Quiz complete! You got {score} out of {len(questions)} correct.")
+
+if __name__ == "__main__":
+    main()
+
 
