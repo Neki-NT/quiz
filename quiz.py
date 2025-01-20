@@ -60,13 +60,15 @@ def main():
         current_answer = st.session_state.answers.get(f"q{i}", "")
         
         # Select box for user to choose from available words
-        if current_answer and current_answer in available_answers:
+        # If there is already a selected answer, it should persist and appear as the current selection
+        if current_answer:
             # If the current answer is valid, find its index
             index = available_answers.index(current_answer) + 1
         else:
             # If no answer or invalid, set index to 0 (empty selection)
             index = 0
         
+        # Display the question and the selectbox
         user_answer = st.selectbox(
             f"{i}. {question}",
             options=[""] + available_answers, 
@@ -74,12 +76,12 @@ def main():
             key=f"q{i}"
         )
 
-        # Store the selected answer in the session state and mark the word as used
+        # If the user selects an answer, update the session state and mark the word as used
         if user_answer and user_answer != current_answer:
             st.session_state.answers[f"q{i}"] = user_answer
             st.session_state.used_words.add(user_answer)
 
-            # Check the answer
+            # Check if the answer is correct
             if user_answer.lower() == correct_answer:
                 score += 1
 
