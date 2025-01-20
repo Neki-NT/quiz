@@ -18,6 +18,10 @@ def main():
     if 'used_words' not in st.session_state:
         st.session_state.used_words = set()
 
+    # Сохраняем ответы на вопросы
+    if 'answers' not in st.session_state:
+        st.session_state.answers = {}
+
     # Список вопросов и правильных ответов
     questions = [
         ("The new fashion __ shows that oversized clothes are becoming popular.", "trend"),
@@ -52,19 +56,21 @@ def main():
         # Create a list of available words (not used yet)
         available_answers = [word for word in answers if word not in st.session_state.used_words]
         
-        # Initially, the dropdown will be empty, and options will appear when the user selects a word
-        user_answer = st.selectbox(f"{i}. {question}", options=[""] + available_answers, key=f"q{i}")
+        # If the user has already selected an answer, use that, otherwise show an empty string
+        current_answer = st.session_state.answers.get(f"q{i}", "")
+        
+        # Select box for user to choose from available words
+        user_answer = st.selectbox(
+            f"{i}. {question}", 
+            options=[""] + available_answers, 
+            index=available_answers.index(current_answer) + 1 if current_answer else 0,
+            key=f"q{i}"
+        )
 
-        # If a word is selected, mark it as used
-        if user_answer:
+        # Store the selected answer in the session state and mark the word as used
+        if user_answer and user_answer != current_answer:
+            st.session_state.answers[f"q{i}"] = user_answer
             st.session_state.used_words.add(user_answer)
 
-            # Check the answer
-            if user_answer.lower() == correct_answer:
-                score += 1
+            # Chec
 
-    if st.button("Submit"):
-        st.write(f"Quiz complete! You got {score} out of {len(questions)} correct.")
-
-if __name__ == "__main__":
-    main()
