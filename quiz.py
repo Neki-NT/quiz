@@ -58,18 +58,12 @@ def main():
         
         # Если у пользователя уже есть выбранный ответ, используем его, иначе показываем пустое значение
         current_answer = st.session_state.answers.get(f"q{i}", "")
-        
-        # Применяем проверку на случай, если current_answer больше нет в доступных
-        if current_answer in available_answers:
-            index = available_answers.index(current_answer) + 1  # +1, чтобы оставить пустой вариант на первом месте
-        else:
-            index = 0  # Если выбранный ответ не доступен, то ставим индекс на пустое значение
 
         # Отображаем вопрос и selectbox
         user_answer = st.selectbox(
             f"{i}. {question}",
             options=[""] + available_answers,  # первый элемент это пустое значение
-            index=index,  # Индекс для текущего ответа
+            index=available_answers.index(current_answer) + 1 if current_answer in available_answers else 0,  # выбираем правильный индекс
             key=f"q{i}"
         )
 
