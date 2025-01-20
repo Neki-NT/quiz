@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def main():
     # Введение
     st.title("English Quiz Program")
@@ -14,7 +13,7 @@ def main():
         "undergo", "undertake", "vehicle", "visual", "virtual", "underlie",
         "vary", "ultimate", "visible", "whereas", "utilise"
     ]
-
+    
     # Сохраняем выбранные слова для отслеживания использованных
     used_words = set()
 
@@ -54,20 +53,20 @@ def main():
     for i, (question, correct_answer) in enumerate(questions, 1):
         # Create a list of available words (not used yet)
         available_answers = [word for word in answers if word not in used_words]
-
+        
         # Select box for user to choose from available words
         user_answer = st.selectbox(f"{i}. {question}", available_answers, key=f"q{i}")
+        
+        # Mark the word as used only if the user has made a selection
+        if user_answer:
+            used_words.add(user_answer)
 
-        # Mark the word as used
-        used_words.add(user_answer)
-
-        # Check answer
-        if user_answer.lower() == correct_answer:
-            score += 1
+            # Check answer
+            if user_answer.lower() == correct_answer:
+                score += 1
 
     if st.button("Submit"):
         st.write(f"Quiz complete! You got {score} out of {len(questions)} correct.")
-
 
 if __name__ == "__main__":
     main()
