@@ -53,35 +53,32 @@ def main():
 
     score = 0
     for i, (question, correct_answer) in enumerate(questions, 1):
-        # Create a list of available words (not used yet)
+        # Создаем список доступных слов (не использованных)
         available_answers = [word for word in answers if word not in st.session_state.used_words]
         
-        # If the user has already selected an answer, use that, otherwise show an empty string
+        # Если у пользователя уже есть выбранный ответ, используем его, иначе показываем пустое значение
         current_answer = st.session_state.answers.get(f"q{i}", "")
         
-        # Select box for user to choose from available words
-        # If there is already a selected answer, it should persist and appear as the current selection
+        # Применяем проверку на случай, если current_answer больше нет в доступных
         if current_answer in available_answers:
-            # If the current answer is valid, find its index
-            index = available_answers.index(current_answer) + 1
+            index = available_answers.index(current_answer) + 1  # +1, чтобы оставить пустой вариант на первом месте
         else:
-            # If no answer or invalid, set index to 0 (empty selection)
-            index = 0
-        
-        # Display the question and the selectbox
+            index = 0  # Если выбранный ответ не доступен, то ставим индекс на пустое значение
+
+        # Отображаем вопрос и selectbox
         user_answer = st.selectbox(
             f"{i}. {question}",
-            options=[""] + available_answers, 
-            index=index, 
+            options=[""] + available_answers,  # первый элемент это пустое значение
+            index=index,  # Индекс для текущего ответа
             key=f"q{i}"
         )
 
-        # If the user selects an answer, update the session state and mark the word as used
+        # Если пользователь выбрал ответ, обновляем состояние и помечаем слово как использованное
         if user_answer and user_answer != current_answer:
             st.session_state.answers[f"q{i}"] = user_answer
             st.session_state.used_words.add(user_answer)
 
-            # Check if the answer is correct
+            # Проверка, правильный ли ответ
             if user_answer.lower() == correct_answer:
                 score += 1
 
