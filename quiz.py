@@ -56,13 +56,13 @@ def main():
         # Создаем список доступных слов (не использованных)
         available_answers = [word for word in answers if word not in st.session_state.used_words]
 
-        # Если у пользователя уже есть выбранный ответ, используем его, иначе показываем пустое значение
+        # Получаем текущий выбранный ответ, если он есть
         current_answer = st.session_state.answers.get(f"q{i}", "")
 
-        # Отображаем вопрос и selectbox
-        # Если current_answer есть, не добавляем его в доступные ответы
+        # Если у пользователя уже есть выбранный ответ, исключаем его из доступных
         available_answers_for_current_question = [word for word in available_answers if word != current_answer]
 
+        # Отображаем вопрос и selectbox
         user_answer = st.selectbox(
             f"{i}. {question}",
             options=[""] + available_answers_for_current_question,  # Пустой вариант и доступные ответы без выбранного
