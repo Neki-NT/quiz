@@ -60,10 +60,17 @@ def main():
         current_answer = st.session_state.answers.get(f"q{i}", "")
         
         # Select box for user to choose from available words
+        if current_answer:
+            # Find the index of the currently selected answer, if available
+            index = available_answers.index(current_answer) + 1
+        else:
+            # If no answer selected, set the index to 0
+            index = 0
+        
         user_answer = st.selectbox(
-            f"{i}. {question}", 
+            f"{i}. {question}",
             options=[""] + available_answers, 
-            index=available_answers.index(current_answer) + 1 if current_answer else 0,
+            index=index, 
             key=f"q{i}"
         )
 
@@ -81,5 +88,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
