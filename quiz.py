@@ -61,7 +61,7 @@ def main():
         
         # Select box for user to choose from available words
         # If there is already a selected answer, it should persist and appear as the current selection
-        if current_answer:
+        if current_answer in available_answers:
             # If the current answer is valid, find its index
             index = available_answers.index(current_answer) + 1
         else:
